@@ -4,16 +4,15 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
 @Composable
 fun Examples() {
-
-    // NavigationRail
-    val lightGreen = Color(0xFF89C78B)
-    val green = Color(0xFF408D42)
 
     val pages = listOf(
         "Menu" to Icons.Default.Menu,
@@ -22,8 +21,24 @@ fun Examples() {
         "Create" to Icons.Default.Create
     )
     var selected by rememberSaveable { mutableStateOf(1) }
+    
+    // NavigationRail
+    NavigationRail(
+        header = { Text("Header") }
+    ) {
+        pages.forEachIndexed { index, page ->
+            NavigationRailItem(
+                selected = selected == index,
+                onClick = { selected = index },
+                icon = { Icon(page.second, page.first) }
+            )
+        }
+    }
 
-
+    // NavigationRail Colors
+    val lightGreen = Color(0xFF89C78B)
+    val green = Color(0xFF408D42)
+    
     NavigationRail(
         header = { Text("Header") },
         containerColor = lightGreen,
@@ -44,5 +59,5 @@ fun Examples() {
             )
         }
     }
-    
+
 }
