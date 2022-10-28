@@ -1,67 +1,49 @@
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Button
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Examples() {
 
-    // Scaffold
-    val menuIcon = Icons.Default.Menu
-    val homeIcon = Icons.Default.Home
-    val alertsIcon = Icons.Default.Notifications
-    val contactsIcon = Icons.Default.Person
+    val scope = rememberCoroutineScope()
+    val snackbarState = remember { SnackbarHostState() }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "My App") },
-                navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(menuIcon, "Menu")
-                    }
-                },
-            )
-        },
-        floatingActionButton = {
-            SmallFloatingActionButton(onClick = { /*TODO*/ }) {
-                Icon(Icons.Default.Email, "Email")
-            }
-        },
-        bottomBar = {
-            BottomAppBar(Modifier.fillMaxHeight(0.16f)) {
-                val pages = listOf(
-                    "Home" to homeIcon,
-                    "Alerts" to alertsIcon,
-                    "Contacts" to contactsIcon
-                )
-                var selected by remember { mutableStateOf(0) }
 
-                pages.forEachIndexed { index, page ->
-                    NavigationBarItem(
-                        selected = selected == index,
-                        onClick = { selected = index },
-                        icon = { Icon(page.second, page.first) }
-                    )
+    // Snackbar
+    Box {
+        Button(
+            onClick = {
+                scope.launch {
+                    snackbarState.showSnackbar(message = "Yum! Snacks")
                 }
             }
-        }
-    ) { padding ->
-
-        // Your main content...
-
-        Box(
-            modifier = Modifier.padding(padding).fillMaxSize(),
-            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Example \nContent...",
-                color = MaterialTheme.colorScheme.onSurface.copy(0.5f)
-            )
+            Text("Click for preview")
         }
+
+        snackbarState.currentSnackbarData?.let { Snackbar(it) }
     }
+
+
+    // Snackbar with Action Label
+    Box {
+        Button(
+            onClick = {
+                scope.launch {
+                    snackbarState.showSnackbar(message = "Yum! Snacks", actionLabel = "Okay")
+                }
+            }
+        ) {
+            Text("Click for preview")
+        }
+
+        snackbarState.currentSnackbarData?.let { Snackbar(it) }
+    }
+
 }
